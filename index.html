@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>職員室用 注文フォーム</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        label { display: block; margin-top: 10px; }
+        input, select, button { width: 100%; padding: 8px; margin-top: 5px; }
+        button { background-color: #06C755; color: white; border: none; }
+    </style>
+</head>
+<body>
+  <h2>職員室注文フォーム</h2>
+  <form id="order-form">
+    <label>ユーザー名<input type="text" id="userName" required></label>
+    <label>職員室
+      <select id="room">
+        <option value="職員室">職員室</option>
+        <option value="生徒指導室">生徒指導室</option>
+        <option value="商業センター">商業センター</option>
+        <option value="事務室">事務室</option>
+        <option value="進路指導室">進路指導室</option>
+      </select>
+    </label>
+    <label>商品名<input type="text" id="item" required></label>
+    <label>数量<input type="number" id="quantity" min="1" value="1" required></label>
+    <button type="submit">注文する</button>
+  </form>
+
+  <script>
+    const scriptUrl = "あなたのGASのURLをここに入れてください"; // 例: https://script.google.com/macros/s/xxxxx/exec
+
+    document.getElementById("order-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const data = {
+        userName: document.getElementById("userName").value,
+        room: document.getElementById("room").value,
+        item: document.getElementById("item").value,
+        quantity: document.getElementById("quantity").value
+      };
+
+      fetch(scriptUrl, {
+        method: "POST",
+        mode: "no-cors", // GAS側でレスポンスが不要な場合
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+      .then(() => {
+        alert("注文を送信しました！");
+        document.getElementById("order-form").reset();
+      })
+      .catch((err) => {
+        console.error("送信エラー:", err);
+        alert("送信に失敗しました。");
+      });
+    });
+
+    // LIFF初期化（必要に応じて）
+    liff.init({ liffId: "あなたのLIFF ID" }).catch(console.error);
+  </script>
+</body>
+</html>
+
+
